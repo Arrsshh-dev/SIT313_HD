@@ -1,0 +1,168 @@
+.profile-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f7f7f7;
+  color: #222;
+  box-sizing: border-box;
+}
+
+.profile-container {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.profile-container > h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.profile-subtitle {
+  margin: 0 0 30px;
+  color: #666;
+  font-size: 15px;
+}
+
+.profile-section {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.profile-section h2 {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.profile-detail {
+  margin-bottom: 18px;
+}
+
+.profile-detail:last-child {
+  margin-bottom: 0;
+}
+
+.profile-detail span {
+  display: block;
+  margin-bottom: 5px;
+  color: #777;
+  font-size: 13px;
+}
+
+.profile-detail p {
+  margin: 0;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.subscription-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.subscription-info h3 {
+  margin: 0 0 7px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.subscription-info p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.subscription-status {
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.free-status {
+  background: #f3f3f3;
+  color: #444;
+}
+
+.paid-status {
+  background: #edf5ee;
+  border-color: #c8ddcb;
+  color: #285c32;
+}
+
+.upgrade-section {
+  margin-top: 20px;
+}
+
+.upgrade-section p {
+  margin: 0 0 14px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.profile-button {
+  display: inline-block;
+  padding: 10px 16px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: #333;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profile-button:hover {
+  background: #222;
+}
+
+.profile-actions {
+  margin-top: 10px;
+}
+
+.logout-button {
+  padding: 9px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: #eee;
+}
+
+@media (max-width: 500px) {
+  .profile-page {
+    padding: 28px 14px;
+  }
+
+  .profile-container > h1 {
+    font-size: 26px;
+  }
+
+  .profile-section {
+    padding: 18px;
+  }
+
+  .subscription-card {
+    align-items: flex-start;
+  }
+}
