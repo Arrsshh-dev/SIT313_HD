@@ -9,13 +9,14 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [subscription, setSubscription] = useState("free");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let unsubscribeProfile = null;
 
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      // Stop listening to the previous user's profile
       if (unsubscribeProfile) {
         unsubscribeProfile();
         unsubscribeProfile = null;
@@ -24,6 +25,8 @@ export function AuthProvider({ children }) {
       setCurrentUser(user);
       setUserProfile(null);
       setSubscription("free");
+      setIsAdmin(false);
+      setTwoFactorEnabled(false);
 
       if (!user) {
         setLoading(false);
@@ -44,9 +47,15 @@ export function AuthProvider({ children }) {
             setSubscription(
               String(profile.subscription || "free").toLowerCase()
             );
+            setIsAdmin(
+              profile.role === "admin" || profile.isAdmin === true
+            );
+            setTwoFactorEnabled(profile.twoFactorEnabled === true);
           } else {
             setUserProfile(null);
             setSubscription("free");
+            setIsAdmin(false);
+            setTwoFactorEnabled(false);
           }
 
           setLoading(false);
@@ -55,6 +64,8 @@ export function AuthProvider({ children }) {
           console.error("Error loading user profile:", error);
           setUserProfile(null);
           setSubscription("free");
+          setIsAdmin(false);
+          setTwoFactorEnabled(false);
           setLoading(false);
         }
       );
@@ -77,6 +88,8 @@ export function AuthProvider({ children }) {
     currentUser,
     userProfile,
     subscription,
+    isAdmin,
+    twoFactorEnabled,
     loading,
     logout,
   };

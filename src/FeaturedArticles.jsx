@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ArticleCard from "./ArticleCard";
 
 import article1 from "./assets/article1.jpg";
@@ -5,6 +6,7 @@ import article2 from "./assets/article2.jpg";
 import article3 from "./assets/article3.jpg";
 
 function FeaturedArticles() {
+    const [showModal, setShowModal] = useState(false);
 
     const articles = [
         {
@@ -33,45 +35,102 @@ function FeaturedArticles() {
         }
     ];
 
+    const extendedArticles = [
+        ...articles,
+        {
+            id: 4,
+            image: article1,
+            title: "Mastering CSS Grid and Flexbox",
+            description: "Deep dive into responsive layout techniques and modern CSS architecture.",
+            author: "DEV@Deakin Community",
+            rating: 4.9
+        },
+        {
+            id: 5,
+            image: article2,
+            title: "State Management Patterns in React 19",
+            description: "An overview of Context, reducers, and modern concurrency hooks.",
+            author: "DEV@Deakin Community",
+            rating: 4.8
+        },
+        {
+            id: 6,
+            image: article3,
+            title: "RESTful API Security with Express & Firebase",
+            description: "Best practices for token validation, CORS, and role-based route protection.",
+            author: "DEV@Deakin Community",
+            rating: 4.9
+        }
+    ];
+
     return (
-    <section
-    id="articles"
-    className="w-full flex justify-center py-8"
->
-    
-    <div className="w-full max-w-6xl px-6">
+        <section id="articles" className="featured-section">
+            <div className="section-container">
+                <h2 className="section-title">Featured Articles</h2>
 
-        <div className="text-center mb-8">
+                <div className="cards-grid">
+                    {articles.map((article) => (
+                        <ArticleCard key={article.id} article={article} />
+                    ))}
+                </div>
 
-        
-<br></br>
-            <h2 className="text-teal-500 text-2xl">
-                Featured Articles
-            </h2>
+                <div className="section-action">
+                    <button
+                        type="button"
+                        className="btn-outline-primary"
+                        onClick={() => setShowModal(true)}
+                    >
+                        See all articles
+                    </button>
+                </div>
+            </div>
 
-        </div>
+            {/* All Articles Dialog Modal */}
+            {showModal && (
+                <div className="catalog-modal-overlay" onClick={() => setShowModal(false)}>
+                    <div
+                        className="catalog-modal-card"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="all-articles-title"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <header className="catalog-modal-header">
+                            <div>
+                                <h2 id="all-articles-title">All Community Articles</h2>
+                                <p>Curated reading list for developers and students.</p>
+                            </div>
+                            <button
+                                type="button"
+                                className="catalog-close-btn"
+                                onClick={() => setShowModal(false)}
+                                aria-label="Close"
+                            >
+                                ×
+                            </button>
+                        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="catalog-modal-body">
+                            <div className="cards-grid">
+                                {extendedArticles.map((article) => (
+                                    <ArticleCard key={article.id} article={article} />
+                                ))}
+                            </div>
+                        </div>
 
-            {articles.map((article) => (
-                <ArticleCard
-                    key={article.id}
-                    article={article}
-                />
-            ))}
-
-        </div>
-
-        <div className="flex justify-center mt-8">
-
-            <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-700">
-                See all articles
-            </button>
-
-        </div>
-
-    </div>
-</section>
+                        <footer className="catalog-modal-footer">
+                            <button
+                                type="button"
+                                className="btn-secondary"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Close
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            )}
+        </section>
     );
 }
 

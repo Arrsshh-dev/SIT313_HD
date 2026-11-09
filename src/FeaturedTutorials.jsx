@@ -1,3 +1,4 @@
+import { useState } from "react";
 import TutorialCard from "./TutorialCard";
 
 import tutorial1 from "./assets/tutorial1.jpg";
@@ -5,6 +6,7 @@ import tutorial2 from "./assets/tutorial2.jpg";
 import tutorial3 from "./assets/tutorial3.jpg";
 
 function FeaturedTutorials() {
+    const [showModal, setShowModal] = useState(false);
 
     const tutorials = [
         {
@@ -33,44 +35,102 @@ function FeaturedTutorials() {
         }
     ];
 
+    const extendedTutorials = [
+        ...tutorials,
+        {
+            id: 4,
+            image: tutorial1,
+            title: "Full Stack Node & Express Setup",
+            description: "Create robust REST endpoints with Firebase Admin SDK authentication.",
+            author: "DEV@Deakin Community",
+            rating: 4.9
+        },
+        {
+            id: 5,
+            image: tutorial2,
+            title: "React Concurrent Hooks: useTransition",
+            description: "Step-by-step tutorial on non-blocking UI rendering and smooth transitions.",
+            author: "DEV@Deakin Community",
+            rating: 4.8
+        },
+        {
+            id: 6,
+            image: tutorial3,
+            title: "Two-Factor Auth with One-Time Passcodes",
+            description: "Implementing second-factor authentication using transactional emails.",
+            author: "DEV@Deakin Community",
+            rating: 4.9
+        }
+    ];
+
     return (
-        <section
-    id="tutorials"
-    className="w-full flex justify-center py-8"
->
-    <div className="w-full max-w-6xl px-6">
+        <section id="tutorials" className="featured-section alt-bg">
+            <div className="section-container">
+                <h2 className="section-title">Featured Tutorials</h2>
 
-        <div className="text-center mb-8">
+                <div className="cards-grid">
+                    {tutorials.map((tutorial) => (
+                        <TutorialCard key={tutorial.id} tutorial={tutorial} />
+                    ))}
+                </div>
 
-        
-<br></br>
-            <h2 className="text-teal-500 text-2xl">
-                Featured Tutorials
-            </h2>
+                <div className="section-action">
+                    <button
+                        type="button"
+                        className="btn-outline-primary"
+                        onClick={() => setShowModal(true)}
+                    >
+                        See all tutorials
+                    </button>
+                </div>
+            </div>
 
-        </div>
+            {/* All Tutorials Dialog Modal */}
+            {showModal && (
+                <div className="catalog-modal-overlay" onClick={() => setShowModal(false)}>
+                    <div
+                        className="catalog-modal-card"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="all-tutorials-title"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <header className="catalog-modal-header">
+                            <div>
+                                <h2 id="all-tutorials-title">All Community Tutorials</h2>
+                                <p>Comprehensive hands-on guides and coding workshops.</p>
+                            </div>
+                            <button
+                                type="button"
+                                className="catalog-close-btn"
+                                onClick={() => setShowModal(false)}
+                                aria-label="Close"
+                            >
+                                ×
+                            </button>
+                        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="catalog-modal-body">
+                            <div className="cards-grid">
+                                {extendedTutorials.map((tutorial) => (
+                                    <TutorialCard key={tutorial.id} tutorial={tutorial} />
+                                ))}
+                            </div>
+                        </div>
 
-            {tutorials.map((tutorial) => (
-                <TutorialCard
-                    key={tutorial.id}
-                    tutorial={tutorial}
-                />
-            ))}
-
-        </div>
-
-        <div className="flex justify-center mt-8">
-
-            <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-700">
-                See all tutorials
-            </button>
-
-        </div>
-
-    </div>
-</section>
+                        <footer className="catalog-modal-footer">
+                            <button
+                                type="button"
+                                className="btn-secondary"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Close
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            )}
+        </section>
     );
 }
 

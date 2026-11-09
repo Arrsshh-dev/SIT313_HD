@@ -3,7 +3,7 @@ import { useAuth } from "./AuthContext";
 import "./App.css";
 
 function Navbar() {
-    const { currentUser, logout } = useAuth();
+    const { currentUser, isAdmin, logout } = useAuth();
     const navigate = useNavigate();
 
     async function handleLogout() {
@@ -17,46 +17,53 @@ function Navbar() {
     }
 
     return (
-        <nav className="navbar">
-            <Link to="/" className="nav-logo">
-                DEV@Deakin
-            </Link>
+        <header className="site-header">
+            <div className="navbar-container">
+                <Link to="/" className="nav-logo">
+                    DEV@Deakin
+                </Link>
 
-            <input
-                type="text"
-                placeholder="Search"
-                className="nav-search"
-            />
+                <div className="nav-search-wrapper">
+                    <input
+                        type="text"
+                        placeholder="Search posts, articles, tutorials..."
+                        className="nav-search-input"
+                    />
+                </div>
 
-            <div className="nav-links">
-                <Link to="/Post">Post</Link>
-                <Link to="/browse-posts">Browse Posts</Link>
+                <nav className="nav-menu">
+                    <Link to="/" className="nav-link">Home</Link>
+                    <Link to="/browse-posts" className="nav-link">Browse Posts</Link>
+                    <Link to="/Post" className="nav-link">New Post</Link>
+                    <Link to="/pricing" className="nav-link">Pricing</Link>
 
-                <Link to="/">Home</Link>
+                    {currentUser ? (
+                        <>
+                            <Link to="/profile" className="nav-link">Profile</Link>
 
-                <Link to="/pricing">Pricing</Link>
+                            {isAdmin && (
+                                <Link to="/admin" className="nav-admin-badge">
+                                    Admin Panel
+                                </Link>
+                            )}
 
-                {currentUser ? (
-                    <>
-                        <Link to="/profile">Profile</Link>
-
-                        <button
-                            type="button"
-                            onClick={handleLogout}
-                            className="nav-logout"
-                        >
-                            Logout
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        <Link to="/login">Login</Link>
-
-                        <Link to="/signup">Sign Up</Link>
-                    </>
-                )}
+                            <button
+                                type="button"
+                                onClick={handleLogout}
+                                className="nav-btn-logout"
+                            >
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <div className="nav-auth-group">
+                            <Link to="/login" className="nav-btn-login">Login</Link>
+                            <Link to="/signup" className="nav-btn-signup">Sign Up</Link>
+                        </div>
+                    )}
+                </nav>
             </div>
-        </nav>
+        </header>
     );
 }
 

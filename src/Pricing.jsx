@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "./firebase";
 import { useAuth } from "./AuthContext";
 import "./Pricing.css";
+
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 function Pricing() {
     const { currentUser, subscription, loading: authLoading } = useAuth();
@@ -115,27 +114,34 @@ function Pricing() {
         setLoading(true);
 
         try {
-            // Update the subscription in the signed-in user's document
-            const userRef = doc(db, "users", currentUser.uid);
-
-            await updateDoc(userRef, {
-                subscription: "paid",
+            // Security fix: Upgrade through backend API instead of direct client-side Firestore write.
+            // Passes Firebase ID Token in Authorization header for server verification.
+            const token = await currentUser.getIdToken();
+            const response = await fetch(`${API}/subscription/upgrade`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(formData)
             });
+
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message || "Could not upgrade your plan.");
+            }
 
             setShowModal(false);
             setSuccess("Your plan has been upgraded to Paid!");
         } catch (err) {
             console.error("Upgrade error:", err);
-            setError(
-                "Could not upgrade your plan. Please check your Firestore rules and try again."
-            );
+            setError(err.message || "Could not upgrade your plan. Please try again.");
         } finally {
             setLoading(false);
         }
     }
 
     return (
-
         <div className="pricing-page">
             {authLoading && <p>Loading your account...</p>}
             <div className="pricing-heading">
@@ -182,29 +188,29 @@ function Pricing() {
                         <li>Enhanced account benefits</li>
                     </ul>
 
-                   {authLoading ? (
-  <button className="pricing-button" disabled>
-    Loading...
-  </button>
-) : !currentUser ? (
-  <Link to="/login" className="pricing-button">
-    Log in to Upgrade
-  </Link>
-) : isPaid ? (
-  <button className="pricing-button" disabled>
-    Current Plan
-  </button>
-) : (
-  <button
-    className="pricing-button"
-    onClick={() => {
-      setError("");
-      setShowModal(true);
-    }}
-  >
-    Upgrade Plan
-  </button>
-)}
+                    {authLoading ? (
+                        <button className="pricing-button" disabled>
+                            Loading...
+                        </button>
+                    ) : !currentUser ? (
+                        <Link to="/login" className="pricing-button">
+                            Log in to Upgrade
+                        </Link>
+                    ) : isPaid ? (
+                        <button className="pricing-button" disabled>
+                            Current Plan
+                        </button>
+                    ) : (
+                        <button
+                            className="pricing-button"
+                            onClick={() => {
+                                setError("");
+                                setShowModal(true);
+                            }}
+                        >
+                            Upgrade Plan
+                        </button>
+                    )}
                 </div>
             </div>
 
